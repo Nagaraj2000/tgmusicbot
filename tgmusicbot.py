@@ -87,7 +87,7 @@ app = Client(
 )
 
 
-# - handlers and functions
+# - handler and functions
 main_filter = (
     filters.text
     & filters.chat(MUSIC_CHATS)
