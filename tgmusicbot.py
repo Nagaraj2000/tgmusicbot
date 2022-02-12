@@ -120,14 +120,7 @@ async def _fetch_and_send_music(message: Message):
         ydl = YoutubeDL(ydl_opts)
         info_dict = ydl.extract_info(message.text, download=False)
         # send a link as a reply to bypass Music category check
-        if not message.reply_to_message \
-                and _youtube_video_not_music(info_dict):
-            inform = ("This video is not under Music category, "
-                      "you can resend the link as a reply "
-                      "to force download it")
-            await _reply_and_delete_later(message, inform,
-                                          DELAY_DELETE_INFORM)
-            return
+      
         if info_dict['duration'] > MUSIC_MAX_LENGTH:
             readable_max_length = str(timedelta(seconds=MUSIC_MAX_LENGTH))
             inform = ("This won't be downloaded because its audio length is "
@@ -153,12 +146,6 @@ async def _fetch_and_send_music(message: Message):
     except Exception as e:
         await message.reply_text(repr(e))
 
-
-def _youtube_video_not_music(info_dict):
-    if info_dict['extractor'] == 'youtube' \
-            and 'Music' not in info_dict['categories']:
-        return True
-    return False
 
 
 async def _reply_and_delete_later(message: Message, text: str, delay: int):
